@@ -1,0 +1,20 @@
+.card {
+  border-radius: 0.5em;
+}
+
+.line-break {
+  border-bottom: 1px solid #bbbbbb;
+}
+
+.title {
+  text-align: center;
+}
+
+#password-area {
+  border: 2.5px dashed #eee;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  margin: 0.5em 0;
+  height: 5em;
+  text-align: center;
+}
