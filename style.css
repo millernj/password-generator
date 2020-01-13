@@ -3,18 +3,38 @@
 }
 
 .line-break {
-  border-bottom: 1px solid #bbbbbb;
+  border-bottom: 1px solid #bbb;
+}
+
+.slider {
+  margin: 0.25em 0;
 }
 
 .title {
   text-align: center;
 }
 
+#copy-button {
+  float: right;
+  margin-top: 0.5em;
+}
+
+#generate-button {
+  float: left;
+  margin-top: 0.5em;
+}
+
 #password-area {
+  outline: 0;
   border: 2.5px dashed #eee;
   border-radius: 0.5em;
+  color: #aaa;
   padding: 0.5em;
   margin: 0.5em 0;
   height: 5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
+  width: 100%;
 }

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./style.css">
   <title>Password Generator</title>
 </head>
+
 <body>
   <div class="container">
     <h2 class="title">Password Generator</h2>
@@ -19,9 +20,127 @@
         <div class="line-break"></div>
         <div id="password-area">Your secure password</div>
         <div class="line-break"></div>
+        <div class="row justify-content-around">
+          <div class="col-auto slider">
+            <label for="password-length-slider">Password Length</label>
+            <span id="password-length-display" class="font-weight-bold ml-2 mt-1"></span>
+            <input type="range" class="input-slider custom-range" id="password-length-slider" min="0" max="64"
+              value="10" step="1">
+          </div>
+          <div class="col-auto slider">
+            <label for="digit-count-slider">Number of Digits</label>
+            <span id="digit-count-display" class="font-weight-bold ml-2 mt-1"></span>
+            <input type="range" class="input-slider custom-range" id="digit-count-slider" min="0" max="10" value="5"
+              step="1">
+          </div>
+          <div class="col-auto slider">
+            <label for="symbol-count-slider">Number of Symbols</label>
+            <span id="symbol-count-display" class="font-weight-bold ml-2 mt-1"></span>
+            <input type="range" class="input-slider custom-range" id="symbol-count-slider" min="0" max="10" value="5"
+              step="1">
+          </div>
+        </div>
+        <div class="line-break"></div>
+        <button type="button" id="copy-button" class="btn btn-primary">Copy to Clipboard</button>
+        <button type="button" id="generate-button" class="btn btn-danger">Generate Password</button>
       </div>
     </div>
   </div>
+  <script>
+
+    const passwordArea = document.getElementById('password-area');
+
+    const passwordLengthSlider = document.getElementById('password-length-slider');
+    const passwordLengthOutput = document.getElementById('password-length-display');
+
+    const digitCountSlider = document.getElementById('digit-count-slider');
+    const digitCountOutput = document.getElementById('digit-count-display');
+
+    const symbolCountSlider = document.getElementById('symbol-count-slider');
+    const symbolCountOutput = document.getElementById('symbol-count-display');
+
+    const copyButton = document.getElementById('copy-button');
+
+    const generateButton = document.getElementById('generate-button');
+    generateButton.onclick = () => {
+      renderPassword();
+    }
+
+    const handlePasswordLength = () => {
+      passwordLengthSlider.min = Number(digitCountSlider.value) + Number(symbolCountSlider.value);
+
+      if (passwordLengthSlider.min >= Number(passwordLengthSlider.value)) {
+        passwordLengthSlider.value = Number(digitCountSlider.value) + Number(symbolCountSlider.value);
+      }
+
+      passwordLengthOutput.innerHTML = passwordLengthSlider.value;
+    }
+
+    // setting up sliders to update values appropriately
+    const sliderArray = [
+      [passwordLengthSlider, passwordLengthOutput],
+      [digitCountSlider, digitCountOutput],
+      [symbolCountSlider, symbolCountOutput]
+    ]
+
+    handlePasswordLength();
+
+    sliderArray.forEach(([slider, display]) => {
+      display.innerHTML = slider.value;
+      slider.oninput = () => {
+        display.innerHTML = slider.value;
+        handlePasswordLength();
+        renderPassword();
+      }
+    });
+
+    let letters = 'abcdefghijklmnopqrstuvwxyz';
+    letters += letters.toUpperCase();
+    const digits = '1234567890';
+    const symbols = '!@#$%^&*(){}[]|\\,.<>/?;:\'"-_=+`~';
+
+
+    const getRandomSelection = (string, count) => {
+
+      let selection = '';
+      for (let i = 0; i < count; i++) {
+        const randomIndex = Math.floor((string.length - 1) * Math.random())
+        selection += string[randomIndex];
+      }
+
+      return selection;
+    }
+
+    const renderPassword = () => {
+
+      const { value: passwordLength } = passwordLengthSlider;
+      const { value: symbolCount } = symbolCountSlider;
+      const { value: digitCount } = digitCountSlider;
+
+      const letterCount = passwordLength - digitCount - symbolCount;
+
+      const selectedLetters = getRandomSelection(letters, letterCount);
+      const selectedDigits = getRandomSelection(digits, digitCount);
+      const selectedSymbols = getRandomSelection(symbols, symbolCount);
+
+      let password = selectedLetters + selectedDigits + selectedSymbols;
+      password = password.split('').sort(() => 05 - Math.random()).join('');
+      passwordArea.innerHTML = password;
+
+      copyButton.onclick = () => {
+        if (passwordArea.value !== 'Your secure password') {
+          const tempElement = document.createElement('textarea');
+          tempElement.value = password;
+          document.body.appendChild(tempElement);
+          tempElement.select();
+          tempElement.setSelectionRange(0, 99999);
+          document.execCommand('copy');
+          document.body.removeChild(tempElement);
+        }
+      }
+    }
+
+  </script>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>
