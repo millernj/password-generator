@@ -14,7 +14,7 @@
 <body>
   <div class="container">
     <h2 class="title">Password Generator</h2>
-    <div class="card">
+    <div class="card clearfix">
       <div class="card-body">
         <h5 class="card-title">Generate a Password</h5>
         <div class="line-break"></div>
@@ -41,8 +41,10 @@
           </div>
         </div>
         <div class="line-break"></div>
-        <button type="button" id="copy-button" class="btn btn-secondary">Copy to Clipboard</button>
-        <button type="button" id="generate-button" class="btn btn-danger">Generate Password</button>
+        <div class="row justify-content-between">
+          <button type="button" id="generate-button" class="btn btn-danger col-sm-auto col-xs-12">Generate Password</button>
+          <button type="button" id="copy-button" class="btn btn-secondary col-sm-auto col-xs-12">Copy to Clipboard</button>
+        </div>
       </div>
     </div>
   </div>
