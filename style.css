@@ -11,6 +11,7 @@
 }
 
 .title {
+  margin-top: 1em;
   text-align: center;
 }
 
@@ -37,4 +38,21 @@
   justify-content: center;
   text-align: center;
   width: 100%;
+}
+
+#password-area p {
+  margin: 0;
+}
+
+.letter {
+  color: #6c757d;
+}
+
+.digit {
+  color: #007bff;
+}
+
+.symbol {
+
+  color: #c82333;
 }

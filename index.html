@@ -21,27 +21,27 @@
         <div id="password-area">Your secure password</div>
         <div class="line-break"></div>
         <div class="row justify-content-around">
-          <div class="col-auto slider">
+          <div class="col-xs-4 slider">
             <label for="password-length-slider">Password Length</label>
-            <span id="password-length-display" class="font-weight-bold ml-2 mt-1"></span>
+            <span id="password-length-display" class="font-weight-bold ml-2 mt-1 letter"></span>
             <input type="range" class="input-slider custom-range" id="password-length-slider" min="0" max="64"
-              value="10" step="1">
+              value="12" step="1">
           </div>
-          <div class="col-auto slider">
+          <div class="col-xs-4 slider">
             <label for="digit-count-slider">Number of Digits</label>
-            <span id="digit-count-display" class="font-weight-bold ml-2 mt-1"></span>
-            <input type="range" class="input-slider custom-range" id="digit-count-slider" min="0" max="10" value="5"
+            <span id="digit-count-display" class="font-weight-bold ml-2 mt-1 digit"></span>
+            <input type="range" class="input-slider custom-range" id="digit-count-slider" min="0" max="10" value="2"
               step="1">
           </div>
-          <div class="col-auto slider">
+          <div class="col-xs-4 slider">
             <label for="symbol-count-slider">Number of Symbols</label>
-            <span id="symbol-count-display" class="font-weight-bold ml-2 mt-1"></span>
-            <input type="range" class="input-slider custom-range" id="symbol-count-slider" min="0" max="10" value="5"
+            <span id="symbol-count-display" class="font-weight-bold ml-2 mt-1 symbol"></span>
+            <input type="range" class="input-slider custom-range" id="symbol-count-slider" min="0" max="10" value="2"
               step="1">
           </div>
         </div>
         <div class="line-break"></div>
-        <button type="button" id="copy-button" class="btn btn-primary">Copy to Clipboard</button>
+        <button type="button" id="copy-button" class="btn btn-secondary">Copy to Clipboard</button>
         <button type="button" id="generate-button" class="btn btn-danger">Generate Password</button>
       </div>
     </div>
@@ -63,7 +63,7 @@
 
     const generateButton = document.getElementById('generate-button');
     generateButton.onclick = () => {
-      renderPassword();
+      generatePassword();
     }
 
     const handlePasswordLength = () => {
@@ -90,7 +90,7 @@
       slider.oninput = () => {
         display.innerHTML = slider.value;
         handlePasswordLength();
-        renderPassword();
+        generatePassword();
       }
     });
 
@@ -111,7 +111,7 @@
       return selection;
     }
 
-    const renderPassword = () => {
+    const generatePassword = () => {
 
       const { value: passwordLength } = passwordLengthSlider;
       const { value: symbolCount } = symbolCountSlider;
@@ -124,8 +124,8 @@
       const selectedSymbols = getRandomSelection(symbols, symbolCount);
 
       let password = selectedLetters + selectedDigits + selectedSymbols;
-      password = password.split('').sort(() => 05 - Math.random()).join('');
-      passwordArea.innerHTML = password;
+      password = password.split('').sort(() => 0.5 - Math.random()).join('');
+      passwordArea.innerHTML = renderPassword(password);
 
       copyButton.onclick = () => {
         if (passwordArea.value !== 'Your secure password') {
@@ -138,6 +138,22 @@
           document.body.removeChild(tempElement);
         }
       }
+    }
+
+    const renderPassword = (password) => {
+      let render = '';
+      for(let i = 0; i < password.length; i++) {
+        if (digits.includes(password[i])) {
+          render+=`<span class="digit">${password[i]}</span>`
+        }
+        if (symbols.includes(password[i])) {
+          render+=`<span class="symbol">${password[i]}</span>`
+        }
+        if (letters.includes(password[i])) {
+          render+=`<span class="letter">${password[i]}</span>`
+        }
+      }
+      return `<p>${render}</p>`;
     }
 
   </script>
