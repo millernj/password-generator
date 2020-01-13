@@ -1,2 +1,2 @@
 # password-generator
-A simple interface for generating passwords
+A simple bootstrap app for generating passwords
