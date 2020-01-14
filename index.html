@@ -50,6 +50,11 @@
   </div>
   <script>
 
+    let letters = 'abcdefghijklmnopqrstuvwxyz';
+    letters += letters.toUpperCase();
+    const digits = '1234567890';
+    const symbols = ' !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
+
     const passwordArea = document.getElementById('password-area');
 
     const passwordLengthSlider = document.getElementById('password-length-slider');
@@ -84,14 +89,14 @@
       passwordLengthOutput.innerHTML = passwordLengthSlider.value;
     }
 
+    handlePasswordLength();
+
     // setting up sliders to update values appropriately
     const sliderArray = [
       [passwordLengthSlider, passwordLengthOutput],
       [digitCountSlider, digitCountOutput],
       [symbolCountSlider, symbolCountOutput]
     ]
-
-    handlePasswordLength();
 
     sliderArray.forEach(([slider, display]) => {
       display.innerHTML = slider.value;
@@ -101,11 +106,6 @@
         generatePassword();
       }
     });
-
-    let letters = 'abcdefghijklmnopqrstuvwxyz';
-    letters += letters.toUpperCase();
-    const digits = '1234567890';
-    const symbols = ' !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
 
     const getRandomSelection = (string, count) => {
 
