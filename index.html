@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./assets/reset.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="./assets/style.css">
@@ -14,156 +15,63 @@
 <body>
   <div class="container">
     <h2 class="title">Password Generator</h2>
+
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Generate a Password</h5>
+
         <div class="line-break"></div>
+
         <div id="password-area">Your secure password</div>
+
         <div class="line-break"></div>
+
         <div class="row justify-content-around">
+
           <div class="col-xs-4 slider">
             <label for="password-length-slider">Password Length</label>
+
             <span id="password-length-display" class="font-weight-bold ml-2 mt-1 letter"></span>
+
             <input type="range" class="input-slider custom-range" id="password-length-slider" min="8" max="128"
               value="12" step="1">
           </div>
+
           <div class="col-xs-4 slider">
             <label for="digit-count-slider">Number of Digits</label>
+
             <span id="digit-count-display" class="font-weight-bold ml-2 mt-1 digit"></span>
+
             <input type="range" class="input-slider custom-range" id="digit-count-slider" min="0" max="10" value="2"
               step="1">
           </div>
+
           <div class="col-xs-4 slider">
             <label for="symbol-count-slider">Number of Symbols</label>
+
             <span id="symbol-count-display" class="font-weight-bold ml-2 mt-1 symbol"></span>
+
             <input type="range" class="input-slider custom-range" id="symbol-count-slider" min="0" max="10" value="2"
               step="1">
           </div>
         </div>
+
         <div class="line-break"></div>
+
         <div class="row justify-content-between">
-          <button type="button" id="generate-button" class="btn btn-danger col-sm-auto col-xs-12">Generate Password</button>
-          <button type="button" id="copy-button" class="btn btn-secondary col-sm-auto col-xs-12">Copy to Clipboard</button>
+          <button type="button" id="generate-button" class="btn btn-danger col-sm-auto col-xs-12">
+            Generate Password
+          </button>
+
+          <button type="button" id="copy-button" class="btn btn-secondary col-sm-auto col-xs-12" data-toggle="tooltip"
+            data-trigger="manual" title="Copied!">
+            Copy to Clipboard
+          </button>
         </div>
       </div>
     </div>
   </div>
-  <script>
 
-    let letters = 'abcdefghijklmnopqrstuvwxyz';
-    letters += letters.toUpperCase();
-    const digits = '1234567890';
-    const symbols = ' !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
-
-    const passwordArea = document.getElementById('password-area');
-
-    const passwordLengthSlider = document.getElementById('password-length-slider');
-    const passwordLengthOutput = document.getElementById('password-length-display');
-
-    const digitCountSlider = document.getElementById('digit-count-slider');
-    const digitCountOutput = document.getElementById('digit-count-display');
-
-    const symbolCountSlider = document.getElementById('symbol-count-slider');
-    const symbolCountOutput = document.getElementById('symbol-count-display');
-
-    const copyButton = document.getElementById('copy-button');
-
-    const generateButton = document.getElementById('generate-button');
-    generateButton.onclick = () => {
-      generatePassword();
-    }
-
-    const handlePasswordLength = () => {
-      const { value: symbolCount } = symbolCountSlider;
-      const { value: digitCount } = digitCountSlider;
-      const { value: passwordLength, min: minimumLength } = passwordLengthSlider;
-
-      if (Number(symbolCount) + Number(digitCount) >= 8) {
-        passwordLengthSlider.min = Number(symbolCount) + Number(digitCount);
-      }
-
-      if (minimumLength >= Number(passwordLength)) {
-        passwordLengthSlider.value = Number(digitCountSlider.value) + Number(symbolCountSlider.value);
-      }
-
-      passwordLengthOutput.innerHTML = passwordLengthSlider.value;
-    }
-
-    handlePasswordLength();
-
-    // setting up sliders to update values appropriately
-    const sliderArray = [
-      [passwordLengthSlider, passwordLengthOutput],
-      [digitCountSlider, digitCountOutput],
-      [symbolCountSlider, symbolCountOutput]
-    ]
-
-    sliderArray.forEach(([slider, display]) => {
-      display.innerHTML = slider.value;
-      slider.oninput = () => {
-        display.innerHTML = slider.value;
-        handlePasswordLength();
-        generatePassword();
-      }
-    });
-
-    const getRandomSelection = (string, count) => {
-
-      let selection = '';
-      for (let i = 0; i < count; i++) {
-        const randomIndex = Math.floor((string.length - 1) * Math.random())
-        selection += string[randomIndex];
-      }
-
-      return selection;
-    }
-
-    const generatePassword = () => {
-
-      const { value: passwordLength } = passwordLengthSlider;
-      const { value: symbolCount } = symbolCountSlider;
-      const { value: digitCount } = digitCountSlider;
-
-      const letterCount = passwordLength - digitCount - symbolCount;
-
-      const selectedLetters = getRandomSelection(letters, letterCount);
-      const selectedDigits = getRandomSelection(digits, digitCount);
-      const selectedSymbols = getRandomSelection(symbols, symbolCount);
-
-      let password = selectedLetters + selectedDigits + selectedSymbols;
-      password = password.split('').sort(() => 0.5 - Math.random()).join('');
-      passwordArea.innerHTML = renderPassword(password);
-
-      copyButton.onclick = () => {
-        if (passwordArea.value !== 'Your secure password') {
-          const tempElement = document.createElement('textarea');
-          tempElement.value = password;
-          document.body.appendChild(tempElement);
-          tempElement.select();
-          tempElement.setSelectionRange(0, 99999);
-          document.execCommand('copy');
-          document.body.removeChild(tempElement);
-        }
-      }
-    }
-
-    const renderPassword = (password) => {
-      let render = '';
-      for(let i = 0; i < password.length; i++) {
-        if (digits.includes(password[i])) {
-          render+=`<span class="digit">${password[i]}</span>`
-        }
-        if (symbols.includes(password[i])) {
-          render+=`<span class="symbol">${password[i]}</span>`
-        }
-        if (letters.includes(password[i])) {
-          render+=`<span class="letter">${password[i]}</span>`
-        }
-      }
-      return `<p>${render}</p>`;
-    }
-
-  </script>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>
@@ -173,6 +81,14 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    });
+  </script>
+
+  <script src='./script.js'></script>
 </body>
 
 </html>
